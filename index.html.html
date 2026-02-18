@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#1a1a1a" />
+<title>Truck Order Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #141413;
+    --paper: #f7f6f3;
+    --surface: #ffffff;
+    --orange: #f27a1a;
+    --orange-glow: #fff3e6;
+    --orange-border: #fdd9b0;
+    --orange-deep: #c25e0a;
+    --green: #1a9a4a;
+    --green-glow: #eefbf3;
+    --green-deep: #0d7a35;
+    --border: #e5e3db;
+    --border-strong: #d4d1c7;
+    --muted: #7c7a72;
+    --muted-light: #a8a69e;
+    --error: #dc2626;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow-soft: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.04);
+    --transition: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--ink);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--orange), #e8590c);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 2px 8px rgba(242, 122, 26, 0.3);
+  }
+  .header-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 2px;
+  }
+  .reset-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #9ca3af;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .reset-btn:hover { color: white; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+  .reset-btn:active { transform: scale(0.95); }
+
+  /* ── Main ── */
+  .main {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 20px 16px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (min-width: 400px) {
+    .main { padding: 28px 20px 80px; gap: 28px; }
+  }
+
+  /* ── Info banner ── */
+  .info-banner {
+    background: var(--orange-glow);
+    border: 1.5px solid var(--orange-border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .info-banner svg { flex-shrink: 0; margin-top: 1px; color: var(--orange); }
+  .info-banner p { font-size: 13px; color: #7c2d12; line-height: 1.65; }
+  .info-banner strong { font-weight: 600; }
+
+  /* ── Section heading ── */
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-heading::before {
+    content: '';
+    width: 4px;
+    height: 22px;
+    background: var(--orange);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-heading h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Input cards ── */
+  .input-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow-card);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .input-card.hero {
+    border-color: var(--ink);
+    background: var(--surface);
+    padding: 22px 20px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+  .input-card.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--orange), #e8590c);
+  }
+
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── Field ── */
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .field-hint {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: -4px;
+    line-height: 1.4;
+  }
+  .field-wrap { position: relative; display: flex; align-items: center; }
+  .field-prefix, .field-suffix {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--muted-light);
+    pointer-events: none;
+    user-select: none;
+  }
+  .field-prefix { left: 18px; }
+  .field-suffix { right: 18px; }
+  .field-input {
+    width: 100%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 16px 18px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    -moz-appearance: textfield;
+    appearance: textfield;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .field-input::-webkit-inner-spin-button,
+  .field-input::-webkit-outer-spin-button { display: none; }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(242, 122, 26, 0.12);
+  }
+  .field-input.has-prefix { padding-left: 42px; }
+  .field-input.has-suffix { padding-right: 46px; }
+  .field-input.is-error { border-color: var(--error); }
+  .field-input.is-error:focus { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12); }
+  .field-error {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--error);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── Locked fields ── */
+  .field-input.locked {
+    background: #f5f4f1;
+    color: var(--muted);
+    border-color: var(--border);
+    cursor: default;
+    font-size: 18px;
+    padding: 14px 16px;
+  }
+  .field-input.locked:focus { border-color: var(--border); outline: none; box-shadow: none; }
+  .locked-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    background: #eeedea;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    width: fit-content;
+  }
+  .input-card.locked-card {
+    background: #fafaf8;
+    border-color: var(--border);
+    box-shadow: none;
+  }
+
+  /* ── Ops pills ── */
+  .ops-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ops-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-card);
+  }
+  .ops-pill-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .ops-pill-icon.truck-icon { background: #fef3c7; }
+  .ops-pill-icon.cal-icon { background: #e0e7ff; }
+  .ops-pill-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .ops-pill-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    margin-top: 3px;
+  }
+  .ops-pill-fixed {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted-light);
+    margin-left: 2px;
+  }
+
+  /* ── Budget bar ── */
+  .budget-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── Results ── */
+  .results-section { display: flex; flex-direction: column; gap: 20px; }
+  .group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .group-helper {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .cards-stack { display: flex; flex-direction: column; gap: 10px; }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── Result card ── */
+  .result-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .result-card:active { transform: scale(0.985); }
+
+  .result-card.orange {
+    background: linear-gradient(135deg, var(--orange), #e8590c);
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(242, 122, 26, 0.25);
+  }
+  .result-card.green {
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(26, 154, 74, 0.2);
+  }
+
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .result-card.orange .card-label,
+  .result-card.green  .card-label { color: rgba(255,255,255,0.72); }
+
+  .card-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .card-value.large { font-size: 34px; }
+  @media (min-width: 400px) {
+    .card-value { font-size: 28px; }
+    .card-value.large { font-size: 38px; }
+  }
+  .result-card.orange .card-value,
+  .result-card.green  .card-value { color: white; }
+
+  .card-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .result-card.orange .card-sub,
+  .result-card.green  .card-sub { color: rgba(255,255,255,0.65); }
+
+  /* ── Empty state ── */
+  .empty {
+    background: var(--surface);
+    border: 2px dashed var(--border-strong);
+    border-radius: var(--radius);
+    padding: 48px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    background: #fef3c7;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+  .empty-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+  .empty-body { font-size: 14px; color: var(--muted); max-width: 280px; line-height: 1.6; }
+
+  /* ── Weekly note banner ── */
+  .weekly-note {
+    background: var(--green-glow);
+    border: 1.5px solid #a7f3d0;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #166534;
+    line-height: 1.65;
+  }
+
+  /* ── Summary table ── */
+  .summary-details {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+  .summary-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    list-style: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    transition: background var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .summary-summary:hover { background: #f9f8f6; }
+  .summary-summary::-webkit-details-marker { display: none; }
+  .chevron { transition: transform 0.25s ease; }
+  details[open] .chevron { transform: rotate(180deg); }
+  .summary-table {
+    border-top: 1px solid var(--border);
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .summary-table th {
+    text-align: left;
+    padding: 12px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    background: #fafaf8;
+  }
+  .summary-table th:not(:first-child) { text-align: right; }
+  .summary-table td { padding: 14px 20px; border-top: 1px solid var(--border); }
+  .summary-table td:not(:first-child) { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  .summary-table .total-row { background: var(--orange-glow); font-weight: 700; }
+  .summary-table .total-row td:not(:first-child) { color: var(--orange-deep); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 24px 20px 16px;
+    border-top: 1.5px solid var(--border);
+    line-height: 1.8;
+  }
+  .footer-credit {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted-light);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Animations ── */
+  @keyframes slideUp {
+    from { transform: translateY(12px); opacity: 0; }
+    to   { transform: translateY(0);   opacity: 1; }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .slide-up { animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+  .fade-in  { animation: fadeIn  0.35s ease-out both; }
+
+  /* ── Divider ── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+
+  /* ── Smooth transitions on results appearing ── */
+  #resultsBlock {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-icon" aria-hidden="true">🚛</div>
+      <div>
+        <div class="header-title">Truck Order Calc</div>
+        <div class="header-sub">Food &amp; Paper per order</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="clearSales()" aria-label="Clear sales figure">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+      Clear
+    </button>
+  </div>
+</header>
+
+<!-- ── Main ── -->
+<main class="main">
+
+  <!-- Info banner -->
+  <div class="info-banner" role="note">
+    <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+    </svg>
+    <p>
+      <strong>One field to update each month</strong> — enter your monthly net sales from your budget paper. Everything else is calculated automatically.
+    </p>
+  </div>
+
+  <!-- ── Inputs ── -->
+  <section aria-labelledby="inputs-heading">
+    <div class="section-heading">
+      <h2 id="inputs-heading">Monthly Net Sales</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <!-- Monthly Net Sales -->
+      <div class="input-card hero">
+        <div class="field">
+          <label class="field-label" for="monthlySales">Monthly Net Sales</label>
+          <div class="field-hint">The only number you update each month</div>
+          <div class="field-wrap">
+            <span class="field-prefix" aria-hidden="true">$</span>
+            <input class="field-input has-prefix" id="monthlySales"
+              type="number" inputmode="numeric" min="0" step="1" placeholder="0"
+              oninput="calc()" autocomplete="off" />
+          </div>
+          <div class="field-error" id="monthlySales-error" role="alert" aria-live="polite" style="display:none">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+            <span>Enter a positive sales amount.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget Percentages — fixed, locked -->
+      <div class="input-grid">
+        <div class="input-card locked-card">
+          <div class="field">
+            <label class="field-label" for="foodPct" style="color:var(--muted)">Food %</label>
+            <div class="field-wrap">
+              <input class="field-input has-suffix locked" id="foodPct"
+                type="number" inputmode="decimal" min="0" max="100" step="0.0001"
+                value="25.00" readonly tabindex="-1" />
+              <span class="field-suffix" aria-hidden="true" style="color:#c4bfb8">%</span>
+            </div>
+            <span class="locked-badge">
+              <svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Fixed
+            </span>
+          </div>
+        </div>
+        <div class="input-card locked-card">
+          <div class="field">
+            <label class="field-label" for="paperPct" style="color:var(--muted)">Paper %</label>
+            <div class="field-wrap">
+              <input class="field-input has-suffix locked" id="paperPct"
+                type="number" inputmode="decimal" min="0" max="100" step="0.0001"
+                value="1.8403" readonly tabindex="-1" />
+              <span class="field-suffix" aria-hidden="true" style="color:#c4bfb8">%</span>
+            </div>
+            <span class="locked-badge">
+              <svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Fixed
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fixed ops constants -->
+      <div class="ops-pills">
+        <div class="ops-pill">
+          <div class="ops-pill-icon truck-icon" aria-hidden="true">🚛</div>
+          <div>
+            <div class="ops-pill-label">Trucks / Week</div>
+            <div class="ops-pill-value">2 <span class="ops-pill-fixed">fixed</span></div>
+          </div>
+        </div>
+        <div class="ops-pill">
+          <div class="ops-pill-icon cal-icon" aria-hidden="true">📅</div>
+          <div>
+            <div class="ops-pill-label">Trucks / Month</div>
+            <div class="ops-pill-value">8 <span class="ops-pill-fixed">fixed</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget summary bar -->
+      <div class="budget-bar" id="budgetBar">
+        <span>Combined: <strong id="combinedPct" style="color:var(--ink)"></strong> of sales</span>
+        <strong id="budgetBarTotal" style="color:var(--ink)"></strong>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── Results ── -->
+  <section aria-labelledby="results-heading" aria-live="polite" aria-atomic="true">
+    <div class="section-heading">
+      <h2 id="results-heading">Results</h2>
+    </div>
+    <div class="results-section">
+
+      <!-- Empty state -->
+      <div class="empty" id="emptyState">
+        <div class="empty-icon" aria-hidden="true">🚛</div>
+        <div class="empty-title">Enter your monthly net sales</div>
+        <div class="empty-body">
+          Type the net sales figure from your budget paper above.
+          Results update instantly.
+        </div>
+      </div>
+
+      <!-- Results block -->
+      <div id="resultsBlock" style="display:none">
+
+        <!-- Per-Truck -->
+        <div style="margin-bottom:24px">
+          <div class="group-label">Per Truck Order</div>
+          <div class="group-helper">Monthly budget ÷ 8 trucks — what to spend on each order.</div>
+          <div class="cards-stack">
+            <div class="result-card orange slide-up" style="animation-delay:0ms">
+              <div class="card-label">Total per Truck</div>
+              <div class="card-value large" id="totalPerTruck">—</div>
+              <div class="card-sub">Food + Paper · 8 trucks/month</div>
+            </div>
+            <div class="cards-row">
+              <div class="result-card slide-up" style="animation-delay:50ms">
+                <div class="card-label">Food per Truck</div>
+                <div class="card-value" id="foodPerTruck">—</div>
+                <div class="card-sub" id="foodPerTruckSub"></div>
+              </div>
+              <div class="result-card slide-up" style="animation-delay:100ms">
+                <div class="card-label">Paper per Truck</div>
+                <div class="card-value" id="paperPerTruck">—</div>
+                <div class="card-sub" id="paperPerTruckSub"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Totals -->
+        <div style="margin-bottom:24px">
+          <div class="group-label">Monthly Totals</div>
+          <div class="group-helper">Matches your budget paper directly.</div>
+          <div class="cards-stack">
+            <div class="result-card green slide-up" style="animation-delay:150ms">
+              <div class="card-label">Monthly Total Budget</div>
+              <div class="card-value" id="monthlyTotal">—</div>
+              <div class="card-sub">Food + Paper · full month</div>
+            </div>
+            <div class="cards-row">
+              <div class="result-card slide-up" style="animation-delay:200ms">
+                <div class="card-label">Monthly Food</div>
+                <div class="card-value" id="monthlyFood">—</div>
+                <div class="card-sub" id="monthlyFoodSub"></div>
+              </div>
+              <div class="result-card slide-up" style="animation-delay:250ms">
+                <div class="card-label">Monthly Paper</div>
+                <div class="card-value" id="monthlyPaper">—</div>
+                <div class="card-sub" id="monthlyPaperSub"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Breakdown -->
+        <div style="margin-bottom:24px">
+          <div class="group-label">Weekly Breakdown</div>
+          <div class="weekly-note" style="margin-bottom:12px">
+            ⚠️ <strong>Estimate only.</strong> Monthly budget ÷ 4.33 avg weeks.
+            Use the <strong>per-truck numbers above</strong> for your actual orders.
+          </div>
+          <div class="cards-row">
+            <div class="result-card slide-up" style="animation-delay:300ms">
+              <div class="card-label">Weekly Food</div>
+              <div class="card-value" id="weeklyFood">—</div>
+              <div class="card-sub">Both trucks · est.</div>
+            </div>
+            <div class="result-card slide-up" style="animation-delay:350ms">
+              <div class="card-label">Weekly Paper</div>
+              <div class="card-value" id="weeklyPaper">—</div>
+              <div class="card-sub">Both trucks · est.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary table -->
+        <details class="summary-details">
+          <summary class="summary-summary">
+            <span>Full Reference Summary</span>
+            <svg class="chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <table class="summary-table" aria-label="Budget summary table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th style="text-align:right">Per Truck</th>
+                <th style="text-align:right">Monthly</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Food</td>
+                <td id="tFoodPerTruck">—</td>
+                <td id="tMonthlyFood">—</td>
+              </tr>
+              <tr>
+                <td>Paper</td>
+                <td id="tPaperPerTruck">—</td>
+                <td id="tMonthlyPaper">—</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td id="tTotalPerTruck">—</td>
+                <td id="tMonthlyTotal">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
+
+      </div><!-- end resultsBlock -->
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div>Truck Order Calculator · Inputs saved automatically</div>
+    <div>Displayed to the cent · Matches your budget paper directly</div>
+    <div class="footer-credit">
+      Developed by Zachary Kirby
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // ── Operational constants ───────────────────────────────────────────────────
+  const TRUCKS_PER_MONTH = 8;
+  const WEEKS_PER_MONTH  = 4.33;
+
+  // ── Currency formatter ──────────────────────────────────────────────────────
+  const usd = new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD',
+    minimumFractionDigits: 2, maximumFractionDigits: 2
+  });
+  const fmt = v => usd.format(v);
+
+  // ── Storage ─────────────────────────────────────────────────────────────────
+  const STORE_KEY = 'truck-calc-v2';
+  const FOOD_PCT  = 25.00;
+  const PAPER_PCT = 1.8403;
+
+  function el(id) { return document.getElementById(id); }
+
+  function saveInputs() {
+    try { localStorage.setItem(STORE_KEY, el('monthlySales').value); } catch(e) {}
+  }
+
+  function loadInputs() {
+    try {
+      const stored = localStorage.getItem(STORE_KEY);
+      if (stored) el('monthlySales').value = stored;
+    } catch(e) {}
+  }
+
+  function clearSales() {
+    el('monthlySales').value = '';
+    try { localStorage.removeItem(STORE_KEY); } catch(e) {}
+    calc();
+    // Re-focus the input for quick re-entry
+    el('monthlySales').focus();
+  }
+
+  // ── Validation ────────────────────────────────────────────────────────────────
+  function setError(id, show) {
+    const e = el(id + '-error'), i = el(id);
+    if (!e || !i) return;
+    e.style.display = show ? 'flex' : 'none';
+    show ? i.classList.add('is-error') : i.classList.remove('is-error');
+  }
+
+  function validate() {
+    const salesRaw = el('monthlySales').value;
+    const sales = parseFloat(salesRaw);
+    if (salesRaw !== '' && (isNaN(sales) || sales <= 0)) {
+      setError('monthlySales', true); return false;
+    }
+    setError('monthlySales', false); return true;
+  }
+
+  // ── Main calculation ──────────────────────────────────────────────────────────
+  function calc() {
+    saveInputs();
+    const salesRaw = el('monthlySales').value;
+    const hasSales = salesRaw !== '' && parseFloat(salesRaw) > 0;
+
+    if (!hasSales) {
+      el('emptyState').style.display   = 'flex';
+      el('resultsBlock').style.display = 'none';
+      el('budgetBar').style.display    = 'none';
+      validate();
+      return;
+    }
+
+    el('emptyState').style.display = 'none';
+
+    if (!validate()) {
+      el('resultsBlock').style.display = 'none';
+      return;
+    }
+
+    el('resultsBlock').style.display = 'block';
+
+    const monthlySales = parseFloat(salesRaw);
+    const foodPct      = FOOD_PCT  / 100;
+    const paperPct     = PAPER_PCT / 100;
+
+    const monthlyFood  = monthlySales * foodPct;
+    const monthlyPaper = monthlySales * paperPct;
+    const monthlyTotal = monthlyFood + monthlyPaper;
+
+    const foodPerTruck  = monthlyFood  / TRUCKS_PER_MONTH;
+    const paperPerTruck = monthlyPaper / TRUCKS_PER_MONTH;
+    const totalPerTruck = foodPerTruck + paperPerTruck;
+
+    const weeklyFood  = monthlyFood  / WEEKS_PER_MONTH;
+    const weeklyPaper = monthlyPaper / WEEKS_PER_MONTH;
+
+    // Budget bar
+    el('budgetBar').style.display    = 'flex';
+    el('combinedPct').textContent    = (FOOD_PCT + PAPER_PCT).toFixed(4) + '%';
+    el('budgetBarTotal').textContent = fmt(monthlyTotal) + ' / mo';
+
+    // Per-truck
+    el('totalPerTruck').textContent    = fmt(totalPerTruck);
+    el('foodPerTruck').textContent     = fmt(foodPerTruck);
+    el('foodPerTruckSub').textContent  = FOOD_PCT + '% ÷ 8 trucks';
+    el('paperPerTruck').textContent    = fmt(paperPerTruck);
+    el('paperPerTruckSub').textContent = PAPER_PCT + '% ÷ 8 trucks';
+
+    // Monthly
+    el('monthlyTotal').textContent    = fmt(monthlyTotal);
+    el('monthlyFood').textContent     = fmt(monthlyFood);
+    el('monthlyFoodSub').textContent  = FOOD_PCT + '% of ' + fmt(monthlySales);
+    el('monthlyPaper').textContent    = fmt(monthlyPaper);
+    el('monthlyPaperSub').textContent = PAPER_PCT + '% of ' + fmt(monthlySales);
+
+    // Weekly
+    el('weeklyFood').textContent  = fmt(weeklyFood);
+    el('weeklyPaper').textContent = fmt(weeklyPaper);
+
+    // Table
+    el('tFoodPerTruck').textContent  = fmt(foodPerTruck);
+    el('tMonthlyFood').textContent   = fmt(monthlyFood);
+    el('tPaperPerTruck').textContent = fmt(paperPerTruck);
+    el('tMonthlyPaper').textContent  = fmt(monthlyPaper);
+    el('tTotalPerTruck').textContent = fmt(totalPerTruck);
+    el('tMonthlyTotal').textContent  = fmt(monthlyTotal);
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────────────────
+  loadInputs();
+  calc();
+</script>
+</body>
+</html>
