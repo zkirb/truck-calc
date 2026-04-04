@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="theme-color" content="#1a1a1a" />
-<title>Truck Order Calculator</title>
+<meta name="theme-color" content="#702082" />
+<title>Truck Order Calculator — Delight Restaurant Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
@@ -16,13 +16,13 @@
     --ink: #141413;
     --paper: #f7f6f3;
     --surface: #ffffff;
-    --orange: #f27a1a;
-    --orange-glow: #fff3e6;
-    --orange-border: #fdd9b0;
-    --orange-deep: #c25e0a;
-    --green: #1a9a4a;
-    --green-glow: #eefbf3;
-    --green-deep: #0d7a35;
+    --orange: #702082;
+    --orange-glow: #f3ecf5;
+    --orange-border: #d4b0e0;
+    --orange-deep: #5a1a6b;
+    --green: #a3238e;
+    --green-glow: #f9ecf7;
+    --green-deep: #841a73;
     --border: #e5e3db;
     --border-strong: #d4d1c7;
     --muted: #7c7a72;
@@ -52,12 +52,12 @@
 
   /* ── Header ── */
   .header {
-    background: var(--ink);
+    background: #702082;
     color: white;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 20px rgba(112,32,130,0.35);
   }
   .header-inner {
     max-width: 540px;
@@ -75,13 +75,13 @@
   .header-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, var(--orange), #e8590c);
+    background: linear-gradient(135deg, var(--orange), #a3238e);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    box-shadow: 0 2px 8px rgba(242, 122, 26, 0.3);
+    box-shadow: 0 2px 8px rgba(112, 32, 130, 0.3);
   }
   .header-title {
     font-family: 'JetBrains Mono', monospace;
@@ -140,7 +140,7 @@
     align-items: flex-start;
   }
   .info-banner svg { flex-shrink: 0; margin-top: 1px; color: var(--orange); }
-  .info-banner p { font-size: 13px; color: #7c2d12; line-height: 1.65; }
+  .info-banner p { font-size: 13px; color: #4a1259; line-height: 1.65; }
   .info-banner strong { font-weight: 600; }
 
   /* ── Section heading ── */
@@ -188,7 +188,7 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--orange), #e8590c);
+    background: linear-gradient(90deg, var(--orange), #a3238e);
   }
 
   .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -241,7 +241,7 @@
   .field-input:focus {
     outline: none;
     border-color: var(--orange);
-    box-shadow: 0 0 0 3px rgba(242, 122, 26, 0.12);
+    box-shadow: 0 0 0 3px rgba(112, 32, 130, 0.12);
   }
   .field-input.has-prefix { padding-left: 42px; }
   .field-input.has-suffix { padding-right: 46px; }
@@ -307,8 +307,8 @@
     font-size: 18px;
     flex-shrink: 0;
   }
-  .ops-pill-icon.truck-icon { background: #fef3c7; }
-  .ops-pill-icon.cal-icon { background: #e0e7ff; }
+  .ops-pill-icon.truck-icon { background: #f3ecf5; }
+  .ops-pill-icon.cal-icon { background: #f0e0f5; }
   .ops-pill-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -381,14 +381,14 @@
   .result-card:active { transform: scale(0.985); }
 
   .result-card.orange {
-    background: linear-gradient(135deg, var(--orange), #e8590c);
+    background: linear-gradient(135deg, var(--orange), #a3238e);
     border-color: transparent;
-    box-shadow: 0 4px 16px rgba(242, 122, 26, 0.25);
+    box-shadow: 0 4px 16px rgba(112, 32, 130, 0.25);
   }
   .result-card.green {
     background: linear-gradient(135deg, var(--green), var(--green-deep));
     border-color: transparent;
-    box-shadow: 0 4px 16px rgba(26, 154, 74, 0.2);
+    box-shadow: 0 4px 16px rgba(163, 35, 142, 0.2);
   }
 
   .card-label {
@@ -437,7 +437,7 @@
   .empty-icon {
     width: 64px;
     height: 64px;
-    background: #fef3c7;
+    background: #f3ecf5;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -450,11 +450,11 @@
   /* ── Weekly note banner ── */
   .weekly-note {
     background: var(--green-glow);
-    border: 1.5px solid #a7f3d0;
+    border: 1.5px solid #d4b0e0;
     border-radius: var(--radius-sm);
     padding: 12px 16px;
     font-size: 12px;
-    color: #166534;
+    color: #5a1a6b;
     line-height: 1.65;
   }
 
@@ -554,10 +554,9 @@
 <header class="header">
   <div class="header-inner">
     <div class="header-left">
-      <div class="header-icon" aria-hidden="true">🚛</div>
       <div>
         <div class="header-title">Truck Order Calc</div>
-        <div class="header-sub">Food &amp; Paper per order</div>
+        <div class="header-sub">Delight Restaurant Group</div>
       </div>
     </div>
     <button class="reset-btn" onclick="clearSales()" aria-label="Clear sales figure">
@@ -571,6 +570,13 @@
 
 <!-- ── Main ── -->
 <main class="main">
+
+  <!-- Company logo -->
+  <div style="text-align:center;padding:8px 0 4px;">
+    <img src="https://images.squarespace-cdn.com/content/v1/59fa2c6f8a02c7bb377f9376/1564172406313-CULFRSM7RTR8DWOBP85M/DelightRG-Logo-RGB-1-01.png"
+      alt="Delight Restaurant Group"
+      style="max-width:220px;width:100%;height:auto;" />
+  </div>
 
   <!-- Info banner -->
   <div class="info-banner" role="note">
