@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="theme-color" content="#702082" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon.svg" />
 <title>Truck Order Calculator — Delight Restaurant Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -865,6 +867,9 @@
 
     el('resultsBlock').style.display = 'block';
 
+    // Haptic feedback on mobile
+    if (navigator.vibrate) navigator.vibrate(10);
+
     const weeklySales = parseFloat(salesRaw);
     const foodPct     = FOOD_PCT  / 100;
     const paperPct    = PAPER_PCT / 100;
@@ -908,6 +913,11 @@
   // ── Init ─────────────────────────────────────────────────────────────────────
   loadInputs();
   calc();
+
+  // ── Service Worker (PWA offline support) ────────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
 </script>
 </body>
 </html>
