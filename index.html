@@ -578,29 +578,29 @@
       <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
     </svg>
     <p>
-      <strong>One field to update each month</strong> — enter your monthly net sales from your budget paper. Everything else is calculated automatically.
+      <strong>One number each week</strong> — enter your weekly sales and get exactly how much to spend on each truck order.
     </p>
   </div>
 
   <!-- ── Inputs ── -->
   <section aria-labelledby="inputs-heading">
     <div class="section-heading">
-      <h2 id="inputs-heading">Monthly Net Sales</h2>
+      <h2 id="inputs-heading">Weekly Sales</h2>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;">
 
-      <!-- Monthly Net Sales -->
+      <!-- Weekly Sales -->
       <div class="input-card hero">
         <div class="field">
-          <label class="field-label" for="monthlySales">Monthly Net Sales</label>
-          <div class="field-hint">The only number you update each month</div>
+          <label class="field-label" for="weeklySales">Weekly Sales</label>
+          <div class="field-hint">The only number you update each week</div>
           <div class="field-wrap">
             <span class="field-prefix" aria-hidden="true">$</span>
-            <input class="field-input has-prefix" id="monthlySales"
+            <input class="field-input has-prefix" id="weeklySales"
               type="number" inputmode="numeric" min="0" step="1" placeholder="0"
               oninput="calc()" autocomplete="off" />
           </div>
-          <div class="field-error" id="monthlySales-error" role="alert" aria-live="polite" style="display:none">
+          <div class="field-error" id="weeklySales-error" role="alert" aria-live="polite" style="display:none">
             <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
             <span>Enter a positive sales amount.</span>
           </div>
@@ -650,13 +650,6 @@
             <div class="ops-pill-value">2 <span class="ops-pill-fixed">fixed</span></div>
           </div>
         </div>
-        <div class="ops-pill">
-          <div class="ops-pill-icon cal-icon" aria-hidden="true">📅</div>
-          <div>
-            <div class="ops-pill-label">Trucks / Month</div>
-            <div class="ops-pill-value">8 <span class="ops-pill-fixed">fixed</span></div>
-          </div>
-        </div>
       </div>
 
       <!-- Budget summary bar -->
@@ -680,9 +673,9 @@
       <!-- Empty state -->
       <div class="empty" id="emptyState">
         <div class="empty-icon" aria-hidden="true">🚛</div>
-        <div class="empty-title">Enter your monthly net sales</div>
+        <div class="empty-title">Enter your weekly sales</div>
         <div class="empty-body">
-          Type the net sales figure from your budget paper above.
+          Type your weekly sales figure above.
           Results update instantly.
         </div>
       </div>
@@ -693,12 +686,12 @@
         <!-- Per-Truck -->
         <div style="margin-bottom:24px">
           <div class="group-label">Per Truck Order</div>
-          <div class="group-helper">Monthly budget ÷ 8 trucks — what to spend on each order.</div>
+          <div class="group-helper">Weekly budget ÷ 2 trucks — what to spend on each order.</div>
           <div class="cards-stack">
             <div class="result-card orange slide-up" style="animation-delay:0ms">
               <div class="card-label">Total per Truck</div>
               <div class="card-value large" id="totalPerTruck">—</div>
-              <div class="card-sub">Food + Paper · 8 trucks/month</div>
+              <div class="card-sub">Food + Paper · 2 trucks/week</div>
             </div>
             <div class="cards-row">
               <div class="result-card slide-up" style="animation-delay:50ms">
@@ -715,48 +708,27 @@
           </div>
         </div>
 
-        <!-- Monthly Totals -->
+        <!-- Weekly Totals -->
         <div style="margin-bottom:24px">
-          <div class="group-label">Monthly Totals</div>
-          <div class="group-helper">Matches your budget paper directly.</div>
+          <div class="group-label">Weekly Totals</div>
+          <div class="group-helper">Both trucks combined for the week.</div>
           <div class="cards-stack">
             <div class="result-card green slide-up" style="animation-delay:150ms">
-              <div class="card-label">Monthly Total Budget</div>
-              <div class="card-value" id="monthlyTotal">—</div>
-              <div class="card-sub">Food + Paper · full month</div>
+              <div class="card-label">Weekly Total Budget</div>
+              <div class="card-value" id="weeklyTotal">—</div>
+              <div class="card-sub">Food + Paper · both trucks</div>
             </div>
             <div class="cards-row">
               <div class="result-card slide-up" style="animation-delay:200ms">
-                <div class="card-label">Monthly Food</div>
-                <div class="card-value" id="monthlyFood">—</div>
-                <div class="card-sub" id="monthlyFoodSub"></div>
+                <div class="card-label">Weekly Food</div>
+                <div class="card-value" id="weeklyFood">—</div>
+                <div class="card-sub" id="weeklyFoodSub"></div>
               </div>
               <div class="result-card slide-up" style="animation-delay:250ms">
-                <div class="card-label">Monthly Paper</div>
-                <div class="card-value" id="monthlyPaper">—</div>
-                <div class="card-sub" id="monthlyPaperSub"></div>
+                <div class="card-label">Weekly Paper</div>
+                <div class="card-value" id="weeklyPaper">—</div>
+                <div class="card-sub" id="weeklyPaperSub"></div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Weekly Breakdown -->
-        <div style="margin-bottom:24px">
-          <div class="group-label">Weekly Breakdown</div>
-          <div class="weekly-note" style="margin-bottom:12px">
-            ⚠️ <strong>Estimate only.</strong> Monthly budget ÷ 4.33 avg weeks.
-            Use the <strong>per-truck numbers above</strong> for your actual orders.
-          </div>
-          <div class="cards-row">
-            <div class="result-card slide-up" style="animation-delay:300ms">
-              <div class="card-label">Weekly Food</div>
-              <div class="card-value" id="weeklyFood">—</div>
-              <div class="card-sub">Both trucks · est.</div>
-            </div>
-            <div class="result-card slide-up" style="animation-delay:350ms">
-              <div class="card-label">Weekly Paper</div>
-              <div class="card-value" id="weeklyPaper">—</div>
-              <div class="card-sub">Both trucks · est.</div>
             </div>
           </div>
         </div>
@@ -774,24 +746,24 @@
               <tr>
                 <th>Category</th>
                 <th style="text-align:right">Per Truck</th>
-                <th style="text-align:right">Monthly</th>
+                <th style="text-align:right">Weekly</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Food</td>
                 <td id="tFoodPerTruck">—</td>
-                <td id="tMonthlyFood">—</td>
+                <td id="tWeeklyFood">—</td>
               </tr>
               <tr>
                 <td>Paper</td>
                 <td id="tPaperPerTruck">—</td>
-                <td id="tMonthlyPaper">—</td>
+                <td id="tWeeklyPaper">—</td>
               </tr>
               <tr class="total-row">
                 <td>Total</td>
                 <td id="tTotalPerTruck">—</td>
-                <td id="tMonthlyTotal">—</td>
+                <td id="tWeeklyTotal">—</td>
               </tr>
             </tbody>
           </table>
@@ -803,7 +775,7 @@
 
   <footer class="footer">
     <div>Truck Order Calculator · Inputs saved automatically</div>
-    <div>Displayed to the cent · Matches your budget paper directly</div>
+    <div>Displayed to the cent</div>
     <div class="footer-credit">
       Developed by Zachary Kirby
     </div>
@@ -813,8 +785,7 @@
 
 <script>
   // ── Operational constants ───────────────────────────────────────────────────
-  const TRUCKS_PER_MONTH = 8;
-  const WEEKS_PER_MONTH  = 4.33;
+  const TRUCKS_PER_WEEK = 2;
 
   // ── Currency formatter ──────────────────────────────────────────────────────
   const usd = new Intl.NumberFormat('en-US', {
@@ -824,29 +795,28 @@
   const fmt = v => usd.format(v);
 
   // ── Storage ─────────────────────────────────────────────────────────────────
-  const STORE_KEY = 'truck-calc-v2';
+  const STORE_KEY = 'truck-calc-v3';
   const FOOD_PCT  = 25.25;
   const PAPER_PCT = 1.8403;
 
   function el(id) { return document.getElementById(id); }
 
   function saveInputs() {
-    try { localStorage.setItem(STORE_KEY, el('monthlySales').value); } catch(e) {}
+    try { localStorage.setItem(STORE_KEY, el('weeklySales').value); } catch(e) {}
   }
 
   function loadInputs() {
     try {
       const stored = localStorage.getItem(STORE_KEY);
-      if (stored) el('monthlySales').value = stored;
+      if (stored) el('weeklySales').value = stored;
     } catch(e) {}
   }
 
   function clearSales() {
-    el('monthlySales').value = '';
+    el('weeklySales').value = '';
     try { localStorage.removeItem(STORE_KEY); } catch(e) {}
     calc();
-    // Re-focus the input for quick re-entry
-    el('monthlySales').focus();
+    el('weeklySales').focus();
   }
 
   // ── Validation ────────────────────────────────────────────────────────────────
@@ -858,18 +828,18 @@
   }
 
   function validate() {
-    const salesRaw = el('monthlySales').value;
+    const salesRaw = el('weeklySales').value;
     const sales = parseFloat(salesRaw);
     if (salesRaw !== '' && (isNaN(sales) || sales <= 0)) {
-      setError('monthlySales', true); return false;
+      setError('weeklySales', true); return false;
     }
-    setError('monthlySales', false); return true;
+    setError('weeklySales', false); return true;
   }
 
   // ── Main calculation ──────────────────────────────────────────────────────────
   function calc() {
     saveInputs();
-    const salesRaw = el('monthlySales').value;
+    const salesRaw = el('weeklySales').value;
     const hasSales = salesRaw !== '' && parseFloat(salesRaw) > 0;
 
     if (!hasSales) {
@@ -889,51 +859,44 @@
 
     el('resultsBlock').style.display = 'block';
 
-    const monthlySales = parseFloat(salesRaw);
-    const foodPct      = FOOD_PCT  / 100;
-    const paperPct     = PAPER_PCT / 100;
+    const weeklySales = parseFloat(salesRaw);
+    const foodPct     = FOOD_PCT  / 100;
+    const paperPct    = PAPER_PCT / 100;
 
-    const monthlyFood  = monthlySales * foodPct;
-    const monthlyPaper = monthlySales * paperPct;
-    const monthlyTotal = monthlyFood + monthlyPaper;
+    const weeklyFood  = weeklySales * foodPct;
+    const weeklyPaper = weeklySales * paperPct;
+    const weeklyTotal = weeklyFood + weeklyPaper;
 
-    const foodPerTruck  = monthlyFood  / TRUCKS_PER_MONTH;
-    const paperPerTruck = monthlyPaper / TRUCKS_PER_MONTH;
+    const foodPerTruck  = weeklyFood  / TRUCKS_PER_WEEK;
+    const paperPerTruck = weeklyPaper / TRUCKS_PER_WEEK;
     const totalPerTruck = foodPerTruck + paperPerTruck;
-
-    const weeklyFood  = monthlyFood  / WEEKS_PER_MONTH;
-    const weeklyPaper = monthlyPaper / WEEKS_PER_MONTH;
 
     // Budget bar
     el('budgetBar').style.display    = 'flex';
     el('combinedPct').textContent    = (FOOD_PCT + PAPER_PCT).toFixed(4) + '%';
-    el('budgetBarTotal').textContent = fmt(monthlyTotal) + ' / mo';
+    el('budgetBarTotal').textContent = fmt(weeklyTotal) + ' / wk';
 
     // Per-truck
     el('totalPerTruck').textContent    = fmt(totalPerTruck);
     el('foodPerTruck').textContent     = fmt(foodPerTruck);
-    el('foodPerTruckSub').textContent  = FOOD_PCT + '% ÷ 8 trucks';
+    el('foodPerTruckSub').textContent  = FOOD_PCT + '% ÷ 2 trucks';
     el('paperPerTruck').textContent    = fmt(paperPerTruck);
-    el('paperPerTruckSub').textContent = PAPER_PCT + '% ÷ 8 trucks';
+    el('paperPerTruckSub').textContent = PAPER_PCT + '% ÷ 2 trucks';
 
-    // Monthly
-    el('monthlyTotal').textContent    = fmt(monthlyTotal);
-    el('monthlyFood').textContent     = fmt(monthlyFood);
-    el('monthlyFoodSub').textContent  = FOOD_PCT + '% of ' + fmt(monthlySales);
-    el('monthlyPaper').textContent    = fmt(monthlyPaper);
-    el('monthlyPaperSub').textContent = PAPER_PCT + '% of ' + fmt(monthlySales);
-
-    // Weekly
-    el('weeklyFood').textContent  = fmt(weeklyFood);
-    el('weeklyPaper').textContent = fmt(weeklyPaper);
+    // Weekly totals
+    el('weeklyTotal').textContent    = fmt(weeklyTotal);
+    el('weeklyFood').textContent     = fmt(weeklyFood);
+    el('weeklyFoodSub').textContent  = FOOD_PCT + '% of ' + fmt(weeklySales);
+    el('weeklyPaper').textContent    = fmt(weeklyPaper);
+    el('weeklyPaperSub').textContent = PAPER_PCT + '% of ' + fmt(weeklySales);
 
     // Table
     el('tFoodPerTruck').textContent  = fmt(foodPerTruck);
-    el('tMonthlyFood').textContent   = fmt(monthlyFood);
+    el('tWeeklyFood').textContent    = fmt(weeklyFood);
     el('tPaperPerTruck').textContent = fmt(paperPerTruck);
-    el('tMonthlyPaper').textContent  = fmt(monthlyPaper);
+    el('tWeeklyPaper').textContent   = fmt(weeklyPaper);
     el('tTotalPerTruck').textContent = fmt(totalPerTruck);
-    el('tMonthlyTotal').textContent  = fmt(monthlyTotal);
+    el('tWeeklyTotal').textContent   = fmt(weeklyTotal);
   }
 
   // ── Init ─────────────────────────────────────────────────────────────────────
