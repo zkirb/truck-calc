@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#702082" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icon.svg" />
-<title>Truck Order Calculator — Delight Restaurant Group</title>
+<title>DRG Calculators — Delight Restaurant Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
@@ -548,6 +548,158 @@
   #resultsBlock {
     animation: fadeIn 0.3s ease-out;
   }
+
+  /* ── Tabs ── */
+  .tabs {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 12px 16px 0;
+    display: flex;
+    gap: 8px;
+  }
+  @media (min-width: 400px) { .tabs { padding: 16px 20px 0; } }
+  .tab {
+    flex: 1;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .tab:hover { color: var(--ink); border-color: var(--border-strong); }
+  .tab:active { transform: scale(0.97); }
+  .tab.is-active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: white;
+    box-shadow: 0 2px 8px rgba(112, 32, 130, 0.25);
+  }
+  .tab-panel[hidden] { display: none; }
+
+  /* ── Star rating ── */
+  .star-row {
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+  }
+  .star-btn {
+    flex: 1;
+    aspect-ratio: 1 / 1;
+    max-width: 56px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    color: #d4d1c7;
+    padding: 0;
+  }
+  .star-btn:hover { border-color: var(--border-strong); }
+  .star-btn:active { transform: scale(0.92); }
+  .star-btn svg { width: 26px; height: 26px; transition: all 0.15s; }
+  .star-btn.is-on {
+    color: #f59e0b;
+    background: #fffbeb;
+    border-color: #fcd34d;
+  }
+  .star-btn.is-on svg { filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.3)); }
+
+  .pillar-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pillar-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .pillar-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .pillar-weight {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--orange);
+    background: var(--orange-glow);
+    border: 1px solid var(--orange-border);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+  .pillar-sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: -4px;
+  }
+
+  .supreme-result {
+    background: linear-gradient(135deg, var(--orange), #a3238e);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 20px rgba(112, 32, 130, 0.3);
+  }
+  .supreme-result-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 8px;
+  }
+  .supreme-result-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .supreme-result-stars {
+    font-size: 22px;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    color: #fcd34d;
+  }
+  .supreme-result-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .supreme-result.empty {
+    background: var(--surface);
+    border: 2px dashed var(--border-strong);
+    color: var(--muted);
+    box-shadow: none;
+  }
+  .supreme-result.empty .supreme-result-label,
+  .supreme-result.empty .supreme-result-sub { color: var(--muted); }
+  .supreme-result.empty .supreme-result-value { color: var(--muted-light); font-size: 32px; }
 </style>
 </head>
 <body>
@@ -557,11 +709,11 @@
   <div class="header-inner">
     <div class="header-left">
       <div>
-        <div class="header-title">Truck Order Calc</div>
+        <div class="header-title" id="headerTitle">Truck Order Calc</div>
         <div class="header-sub">Delight Restaurant Group</div>
       </div>
     </div>
-    <button class="reset-btn" onclick="clearSales()" aria-label="Clear sales figure">
+    <button class="reset-btn" onclick="clearActive()" aria-label="Clear current tab inputs">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
       </svg>
@@ -569,6 +721,12 @@
     </button>
   </div>
 </header>
+
+<!-- ── Tabs ── -->
+<nav class="tabs" role="tablist" aria-label="Calculator tabs">
+  <button class="tab is-active" data-tab="truck" role="tab" aria-selected="true" type="button">Truck Order</button>
+  <button class="tab" data-tab="supreme" role="tab" aria-selected="false" type="button">Supreme</button>
+</nav>
 
 <!-- ── Main ── -->
 <main class="main">
@@ -579,6 +737,9 @@
       alt="Delight Restaurant Group"
       style="max-width:220px;width:100%;height:auto;" />
   </div>
+
+  <!-- ── Truck Order panel ── -->
+  <div class="tab-panel" data-panel="truck" role="tabpanel">
 
   <!-- Info banner -->
   <div class="info-banner" role="note">
@@ -781,6 +942,84 @@
     </div>
   </section>
 
+  </div><!-- end truck panel -->
+
+  <!-- ── Supreme panel ── -->
+  <div class="tab-panel" data-panel="supreme" role="tabpanel" hidden>
+
+    <!-- Info banner -->
+    <div class="info-banner" role="note">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+      </svg>
+      <p>
+        <strong>Tap your star rating</strong> for each pillar — your Final Supreme score updates automatically.
+      </p>
+    </div>
+
+    <!-- Pillar inputs -->
+    <section aria-labelledby="pillars-heading">
+      <div class="section-heading">
+        <h2 id="pillars-heading">Pillar Star Ratings</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div class="pillar-card" data-pillar="guest">
+          <div class="pillar-head">
+            <span class="pillar-name">Guest Experience</span>
+            <span class="pillar-weight">40%</span>
+          </div>
+          <div class="pillar-sub">Complaints / 1k loyalty transactions</div>
+          <div class="star-row" role="radiogroup" aria-label="Guest Experience star rating"></div>
+        </div>
+
+        <div class="pillar-card" data-pillar="speed">
+          <div class="pillar-head">
+            <span class="pillar-name">Speed of Service</span>
+            <span class="pillar-weight">20%</span>
+          </div>
+          <div class="pillar-sub">Drive-Thru Order-to-Delivery time</div>
+          <div class="star-row" role="radiogroup" aria-label="Speed of Service star rating"></div>
+        </div>
+
+        <div class="pillar-card" data-pillar="people">
+          <div class="pillar-head">
+            <span class="pillar-name">Manager Counts</span>
+            <span class="pillar-weight">20%</span>
+          </div>
+          <div class="pillar-sub">Certified managers per restaurant</div>
+          <div class="star-row" role="radiogroup" aria-label="Manager Counts star rating"></div>
+        </div>
+
+        <div class="pillar-card" data-pillar="standards">
+          <div class="pillar-head">
+            <span class="pillar-name">Brand Standards</span>
+            <span class="pillar-weight">20%</span>
+          </div>
+          <div class="pillar-sub">Core Ops &amp; Food Safety score</div>
+          <div class="star-row" role="radiogroup" aria-label="Brand Standards star rating"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Final Supreme result -->
+    <section aria-labelledby="supreme-heading" aria-live="polite" aria-atomic="true">
+      <div class="section-heading">
+        <h2 id="supreme-heading">Final Supreme</h2>
+      </div>
+      <div class="supreme-result empty" id="supremeResult">
+        <div class="supreme-result-label">Final Supreme</div>
+        <div class="supreme-result-value" id="supremeValue">—</div>
+        <div class="supreme-result-stars" id="supremeStars" aria-hidden="true"></div>
+        <div class="supreme-result-sub" id="supremeSub">Rate all four pillars to see your score</div>
+      </div>
+    </section>
+
+  </div><!-- end supreme panel -->
+
   <footer class="footer">
     <div>Truck Order Calculator · Inputs saved automatically</div>
     <div>Displayed to the cent</div>
@@ -910,9 +1149,168 @@
     el('tWeeklyTotal').textContent   = fmt(weeklyTotal);
   }
 
+  // ── Tabs ────────────────────────────────────────────────────────────────────
+  const TAB_KEY = 'truck-calc-active-tab';
+  const TAB_TITLES = { truck: 'Truck Order Calc', supreme: 'Supreme Calc' };
+
+  function setActiveTab(name) {
+    document.querySelectorAll('.tab').forEach(t => {
+      const on = t.dataset.tab === name;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.hidden = p.dataset.panel !== name;
+    });
+    el('headerTitle').textContent = TAB_TITLES[name] || TAB_TITLES.truck;
+    try { localStorage.setItem(TAB_KEY, name); } catch(e) {}
+  }
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      if (navigator.vibrate) navigator.vibrate(8);
+      setActiveTab(t.dataset.tab);
+    });
+  });
+
+  function getActiveTab() {
+    const active = document.querySelector('.tab.is-active');
+    return active ? active.dataset.tab : 'truck';
+  }
+
+  function clearActive() {
+    if (getActiveTab() === 'supreme') clearSupreme();
+    else clearSales();
+  }
+
+  // ── Supreme calculator ──────────────────────────────────────────────────────
+  const SUPREME_KEY = 'truck-calc-supreme-v1';
+  const PILLARS = [
+    { key: 'guest',     weight: 0.40 },
+    { key: 'speed',     weight: 0.20 },
+    { key: 'people',    weight: 0.20 },
+    { key: 'standards', weight: 0.20 }
+  ];
+  const supremeRatings = { guest: 0, speed: 0, people: 0, standards: 0 };
+
+  const STAR_PATH = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+
+  function buildStarRows() {
+    document.querySelectorAll('.pillar-card').forEach(card => {
+      const pillar = card.dataset.pillar;
+      const row = card.querySelector('.star-row');
+      row.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'star-btn';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', 'false');
+        btn.setAttribute('aria-label', i + ' star' + (i > 1 ? 's' : ''));
+        btn.dataset.value = i;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="' + STAR_PATH + '"/></svg>';
+        btn.addEventListener('click', () => setStars(pillar, i));
+        row.appendChild(btn);
+      }
+    });
+  }
+
+  function setStars(pillar, value) {
+    supremeRatings[pillar] = value;
+    paintStars(pillar);
+    if (navigator.vibrate) navigator.vibrate(10);
+    calcSupreme();
+    saveSupreme();
+  }
+
+  function paintStars(pillar) {
+    const card = document.querySelector('.pillar-card[data-pillar="' + pillar + '"]');
+    if (!card) return;
+    const value = supremeRatings[pillar];
+    card.querySelectorAll('.star-btn').forEach(btn => {
+      const v = parseInt(btn.dataset.value, 10);
+      const on = v <= value;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-checked', v === value ? 'true' : 'false');
+    });
+  }
+
+  function paintAllStars() {
+    PILLARS.forEach(p => paintStars(p.key));
+  }
+
+  function saveSupreme() {
+    try { localStorage.setItem(SUPREME_KEY, JSON.stringify(supremeRatings)); } catch(e) {}
+  }
+
+  function loadSupreme() {
+    try {
+      const raw = localStorage.getItem(SUPREME_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      PILLARS.forEach(p => {
+        const v = parseInt(saved[p.key], 10);
+        if (v >= 1 && v <= 5) supremeRatings[p.key] = v;
+      });
+    } catch(e) {}
+  }
+
+  function clearSupreme() {
+    PILLARS.forEach(p => supremeRatings[p.key] = 0);
+    paintAllStars();
+    calcSupreme();
+    try { localStorage.removeItem(SUPREME_KEY); } catch(e) {}
+  }
+
+  function starString(score) {
+    const full = Math.floor(score);
+    const half = (score - full) >= 0.5;
+    let s = '';
+    for (let i = 0; i < full; i++) s += '★';
+    if (half) s += '½';
+    const remaining = 5 - full - (half ? 1 : 0);
+    for (let i = 0; i < remaining; i++) s += '☆';
+    return s;
+  }
+
+  function calcSupreme() {
+    const allRated = PILLARS.every(p => supremeRatings[p.key] >= 1);
+    const result = el('supremeResult');
+    const value = el('supremeValue');
+    const stars = el('supremeStars');
+    const sub = el('supremeSub');
+
+    if (!allRated) {
+      result.classList.add('empty');
+      value.textContent = '—';
+      stars.textContent = '';
+      sub.textContent = 'Rate all four pillars to see your score';
+      return;
+    }
+
+    let raw = 0;
+    PILLARS.forEach(p => { raw += supremeRatings[p.key] * p.weight; });
+    const rounded = Math.round(raw * 2) / 2;
+
+    result.classList.remove('empty');
+    value.textContent = rounded.toFixed(1);
+    stars.textContent = starString(rounded);
+    sub.textContent = 'Weighted score · rounded to nearest half-star';
+  }
+
   // ── Init ─────────────────────────────────────────────────────────────────────
   loadInputs();
   calc();
+
+  buildStarRows();
+  loadSupreme();
+  paintAllStars();
+  calcSupreme();
+
+  try {
+    const savedTab = localStorage.getItem(TAB_KEY);
+    if (savedTab === 'supreme') setActiveTab('supreme');
+  } catch(e) {}
 
   // ── Service Worker (PWA offline support) ────────────────────────────────────
   if ('serviceWorker' in navigator) {
