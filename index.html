@@ -701,6 +701,50 @@
   .supreme-result.empty .supreme-result-sub { color: var(--muted); }
   .supreme-result.empty .supreme-result-value { color: var(--muted-light); font-size: 32px; }
 
+  .supreme-result-raw {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+  }
+  .supreme-result.empty .supreme-result-raw { display: none; }
+
+  /* ── Inline section reset ── */
+  .section-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .section-heading-row .section-heading { margin-bottom: 0; }
+  .ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 11px;
+    cursor: pointer;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--border-strong); background: #fafaf8; }
+  .ghost-btn:active { transform: scale(0.95); }
+
   /* ── Bonus toggle (Perfect Reviews) ── */
   .bonus-card {
     background: #fffbeb;
@@ -1032,8 +1076,16 @@
 
     <!-- Pillar inputs -->
     <section aria-labelledby="pillars-heading">
-      <div class="section-heading">
-        <h2 id="pillars-heading">Pillar Star Ratings</h2>
+      <div class="section-heading-row">
+        <div class="section-heading">
+          <h2 id="pillars-heading">Pillar Star Ratings</h2>
+        </div>
+        <button type="button" class="ghost-btn" onclick="clearSupreme()" aria-label="Reset all Supreme ratings">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1015 -6.7L21 3m0 0v6m0-6h-6"/>
+          </svg>
+          Reset
+        </button>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px;">
 
@@ -1098,6 +1150,7 @@
       <div class="supreme-result empty" id="supremeResult">
         <div class="supreme-result-label">Final Supreme</div>
         <div class="supreme-result-value" id="supremeValue">—</div>
+        <div class="supreme-result-raw" id="supremeRaw">Raw: —</div>
         <div class="supreme-result-stars" id="supremeStars" aria-hidden="true"></div>
         <div class="supreme-result-sub" id="supremeSub">Rate all four pillars to see your score</div>
       </div>
@@ -1391,11 +1444,13 @@
     const value = el('supremeValue');
     const stars = el('supremeStars');
     const sub = el('supremeSub');
+    const rawEl = el('supremeRaw');
 
     if (!allRated) {
       result.classList.add('empty');
       value.textContent = '—';
       stars.textContent = '';
+      rawEl.textContent = 'Raw: —';
       sub.textContent = 'Rate all four pillars to see your score';
       return;
     }
@@ -1414,6 +1469,7 @@
     result.classList.remove('empty');
     value.textContent = rounded.toFixed(1);
     stars.textContent = starString(rounded);
+    rawEl.textContent = 'Raw: ' + raw.toFixed(2);
 
     if (perfectBonus) {
       const capped = supremeRatings.guest === 5;
