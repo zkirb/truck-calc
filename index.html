@@ -1060,7 +1060,7 @@
             <div class="field-wrap">
               <input class="field-input has-suffix locked" id="foodPct"
                 type="number" inputmode="decimal" min="0" max="100" step="0.0001"
-                value="24.35" readonly tabindex="-1" />
+                value="23.40" readonly tabindex="-1" />
               <span class="field-suffix" aria-hidden="true" style="color:#c4bfb8">%</span>
             </div>
             <span class="locked-badge">
@@ -1075,7 +1075,7 @@
             <div class="field-wrap">
               <input class="field-input has-suffix locked" id="paperPct"
                 type="number" inputmode="decimal" min="0" max="100" step="0.0001"
-                value="1.8403" readonly tabindex="-1" />
+                value="1.85" readonly tabindex="-1" />
               <span class="field-suffix" aria-hidden="true" style="color:#c4bfb8">%</span>
             </div>
             <span class="locked-badge">
@@ -1491,8 +1491,8 @@
 
   // ── Storage ─────────────────────────────────────────────────────────────────
   const STORE_KEY = 'truck-calc-v3';
-  const FOOD_PCT  = 24.35;
-  const PAPER_PCT = 1.8403;
+  const FOOD_PCT  = 23.40;
+  const PAPER_PCT = 1.85;
 
   function el(id) { return document.getElementById(id); }
 
@@ -1571,22 +1571,22 @@
 
     // Budget bar
     el('budgetBar').style.display    = 'flex';
-    el('combinedPct').textContent    = (FOOD_PCT + PAPER_PCT).toFixed(4) + '%';
+    el('combinedPct').textContent    = (FOOD_PCT + PAPER_PCT).toFixed(2) + '%';
     el('budgetBarTotal').textContent = fmt(weeklyTotal) + ' / wk';
 
     // Per-truck
     el('totalPerTruck').textContent    = fmt(totalPerTruck);
     el('foodPerTruck').textContent     = fmt(foodPerTruck);
-    el('foodPerTruckSub').textContent  = FOOD_PCT + '% ÷ 2 trucks';
+    el('foodPerTruckSub').textContent  = FOOD_PCT.toFixed(2) + '% ÷ 2 trucks';
     el('paperPerTruck').textContent    = fmt(paperPerTruck);
-    el('paperPerTruckSub').textContent = PAPER_PCT + '% ÷ 2 trucks';
+    el('paperPerTruckSub').textContent = PAPER_PCT.toFixed(2) + '% ÷ 2 trucks';
 
     // Weekly totals
     el('weeklyTotal').textContent    = fmt(weeklyTotal);
     el('weeklyFood').textContent     = fmt(weeklyFood);
-    el('weeklyFoodSub').textContent  = FOOD_PCT + '% of ' + fmt(weeklySales);
+    el('weeklyFoodSub').textContent  = FOOD_PCT.toFixed(2) + '% of ' + fmt(weeklySales);
     el('weeklyPaper').textContent    = fmt(weeklyPaper);
-    el('weeklyPaperSub').textContent = PAPER_PCT + '% of ' + fmt(weeklySales);
+    el('weeklyPaperSub').textContent = PAPER_PCT.toFixed(2) + '% of ' + fmt(weeklySales);
 
     // Table
     el('tFoodPerTruck').textContent  = fmt(foodPerTruck);
